@@ -1,0 +1,134 @@
+{
+  "currency": "CNY",
+  "demo": true,
+  "demo_note": "Demo data — not a real price list. Prices, dimensions and materials are sample values for this agentic-website demo, not a real quote.",
+  "extras": [
+    {
+      "delta": 18000,
+      "id": "led",
+      "name": "LED 灯带"
+    },
+    {
+      "delta": 26000,
+      "id": "socket",
+      "name": "轨道插座"
+    },
+    {
+      "delta": 9000,
+      "id": "hinge",
+      "name": "缓冲铰链"
+    }
+  ],
+  "finishes": [
+    {
+      "delta": 0,
+      "id": "walnut",
+      "name": "胡桃木"
+    },
+    {
+      "delta": 0,
+      "id": "white-oak",
+      "name": "白橡木"
+    },
+    {
+      "delta": 0,
+      "id": "matte-white",
+      "name": "哑光白"
+    },
+    {
+      "delta": 12000,
+      "id": "dark-walnut",
+      "name": "深胡桃"
+    }
+  ],
+  "items": [
+    {
+      "category": "衣柜",
+      "depthCm": 55,
+      "features": "挂杆＋可调层板＋2 抽屉",
+      "heightCm": 200,
+      "id": "wardrobe-120",
+      "material": "胡桃木贴面",
+      "name": "分段式衣柜 120",
+      "price": 328000,
+      "widthCm": 120
+    },
+    {
+      "category": "衣柜",
+      "depthCm": 55,
+      "features": "挂杆＋可调层板＋2 抽屉",
+      "heightCm": 200,
+      "id": "wardrobe-160",
+      "material": "胡桃木贴面",
+      "name": "分段式衣柜 160",
+      "price": 428000,
+      "widthCm": 160
+    },
+    {
+      "category": "餐边柜",
+      "depthCm": 40,
+      "features": "电器位＋轨道插座＋水吧台面",
+      "heightCm": 85,
+      "id": "sideboard-140",
+      "material": "胡桃木贴面",
+      "name": "餐边柜 140",
+      "price": 218000,
+      "widthCm": 140
+    },
+    {
+      "category": "餐边柜",
+      "depthCm": 40,
+      "features": "电器位＋轨道插座＋水吧台面",
+      "heightCm": 85,
+      "id": "sideboard-180",
+      "material": "胡桃木贴面",
+      "name": "餐边柜 180",
+      "price": 298000,
+      "widthCm": 180
+    },
+    {
+      "category": "玄关柜",
+      "depthCm": 35,
+      "features": "同色成套；挂衣区＋鞋柜",
+      "heightCm": 200,
+      "id": "entry-100",
+      "material": "胡桃木贴面",
+      "name": "玄关柜 100",
+      "price": 168000,
+      "widthCm": 100
+    },
+    {
+      "category": "电视柜",
+      "depthCm": 40,
+      "features": "同色一体系列；走线孔＋抽屉",
+      "heightCm": 45,
+      "id": "tv-200",
+      "material": "胡桃木贴面",
+      "name": "电视柜 200",
+      "price": 188000,
+      "widthCm": 200
+    },
+    {
+      "category": "书柜",
+      "depthCm": 32,
+      "features": "同色一体系列；可调层板",
+      "heightCm": 200,
+      "id": "bookcase-120",
+      "material": "胡桃木贴面",
+      "name": "书柜 120",
+      "price": 198000,
+      "widthCm": 120
+    },
+    {
+      "category": "茶柜",
+      "depthCm": 35,
+      "features": "顶格＋暖光灯带；2×2 格；双黑抽屉带",
+      "heightCm": 120,
+      "id": "tea-500",
+      "material": "胡桃木贴面",
+      "name": "茶柜 500",
+      "price": 128000,
+      "widthCm": 50
+    }
+  ]
+}

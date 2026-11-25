@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Cabinet Studio: a demo furniture-configuration site with an in-browser agent assistant. Prices are demo data; quotes are simulated, with no payment or real order.">
+    <title>Cabinet Studio — 家具配置</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="script.js"></script>
+    <script type="module" src="site.js"></script>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="#">Cabinet <span>Studio</span></a>
+      <nav aria-label="Main navigation"><a href="#catalog">目录</a><a href="#quote">报价单</a><a href="#assistant">助手</a></nav>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="welcome">
+        <p class="eyebrow">柜子，按你的家来配。</p>
+        <h1 id="welcome">先聊聊，再配柜子。</h1>
+        <p>衣柜、餐边柜、玄关柜、电视柜、书柜、茶柜——选饰面、加灯带与插座，配好出一份报价单。</p>
+        <p class="demo-note">演示站点：目录价格为演示数据，不是真实报价；报价单只存在本页内存里，不收款、不下真单。</p>
+      </section>
+      <div class="config-layout">
+        <section id="catalog" aria-labelledby="catalog-heading">
+          <h2 id="catalog-heading">目录</h2>
+          <p>价格为人民币演示价，不含运费与安装费。本站不提供送货安装上门服务。</p>
+          <div id="catalog-items" class="catalog-items"></div>
+          <noscript>Please enable JavaScript to view the catalog and build a quote.</noscript>
+        </section>
+        <section id="configure" class="configure" aria-labelledby="configure-heading">
+          <h2 id="configure-heading">配置</h2>
+          <div id="draft-config"></div>
+          <p id="draft-price" class="draft-price"></p>
+          <label for="draft-quantity">数量</label>
+          <input id="draft-quantity" name="draftQuantity" type="number" min="1" max="100" value="1">
+          <button id="draft-add" type="button" disabled>加入报价单</button>
+        </section>
+        <section id="quote" class="quote" aria-labelledby="quote-heading">
+          <h2 id="quote-heading">报价单</h2>
+          <p id="empty-quote">报价单是空的。先从目录里加一件柜子。</p>
+          <ul id="quote-items" class="quote-items"></ul>
+          <p class="total">合计 <strong id="quote-total">¥0.00</strong></p>
+          <label for="customer-name">你的名字</label>
+          <input id="customer-name" name="customerName" autocomplete="name" maxlength="80">
+          <button id="issue-quote" type="button" disabled>出报价</button>
+          <p id="quote-error" role="alert"></p>
+          <p id="quote-status" class="visually-hidden" role="status"></p>
+        </section>
+      </div>
+      <section id="confirmation" class="confirmation" aria-labelledby="confirmation-heading" tabindex="-1" hidden>
+        <p class="eyebrow">报价已出</p>
+        <h2 id="confirmation-heading">演示报价单已出！</h2>
+        <p id="quote-summary"></p>
+        <ul id="quote-lines"></ul>
+        <p id="quote-issued-total"></p>
+        <p>这只是演示报价。刷新页面后报价单清空。</p>
+      </section>
+      <section id="assistant" class="assistant" aria-labelledby="assistant-heading">
+        <h2 id="assistant-heading">问 Cabinet Studio</h2>
+        <p>问问尺寸、材质与价格，或让助手帮你配柜子、出报价。在下面设置里填你自己的 LLM 密钥。</p>
+        <p class="assistant-note">你的消息与本页数据会发给你在设置里选的 LLM 服务商。出报价这类不可撤销的操作，执行前会请你确认。</p>
+        <p id="assistant-status" role="status">Connecting the assistant… If this message stays, the assistant could not load. You can still use the page directly.</p>
+        <div id="agent-app">
+          <div data-ns-slot="header"></div>
+          <div class="assistant-panels">
+            <div data-ns-slot="chat"></div>
+            <div data-ns-slot="agents"></div>
+          </div>
+          <div data-ns-slot="settings"></div>
+        </div>
+      </section>
+    </main>
+    <footer>Cabinet Studio · A demo for the Open Agentic Web · Prices are demo data</footer>
+  </body>
+</html>

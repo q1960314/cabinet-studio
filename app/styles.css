@@ -1,0 +1,740 @@
+/* Fonts are stored with the site, so the page loads nothing from other servers.
+   Both are under the SIL Open Font License: see the files in fonts/. */
+@font-face {
+  font-family: "Fredoka";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("fonts/fredoka.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url("fonts/nunito.woff2") format("woff2");
+}
+
+:root {
+  /* Warm paper, dark ink and soft lines, shared by the example sites. */
+  --paper: #fbf6ef;
+  --paper-deep: #f4ece1;
+  --surface: #ffffff;
+  --ink: #2a211c;
+  --ink-soft: #4d3f33;
+  --muted: #6b5949;
+  --line: #e9ddcd;
+  --line-strong: #d8c7b2;
+  --ok: #2e8b5a;
+  --ok-ink: #1c593a;
+  --ok-bg: #eaf5ee;
+  --ok-line: #cde8d6;
+  --warn-bg: #fcf3e1;
+  --warn-line: #f1c977;
+  --error: #a3261b;
+  /* This site's own colors. */
+  --brand: #7c4a21;
+  --brand-dark: #5d3517;
+  --brand-soft: #f3e7d8;
+  --focus: #216c99;
+    --display: "Fredoka", "Nunito", system-ui, sans-serif;
+  --text: "Nunito", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(77, 63, 51, .10);
+  --shadow-lift: 0 30px 80px rgba(42, 33, 28, .35);
+  color-scheme: light;
+  font-family: var(--text);
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+main, footer { max-width: 1120px; margin: auto; padding: 24px; }
+/* The header's line runs the full width, while its content lines up with main. */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px max(24px, calc((100% - 1120px) / 2 + 24px));
+  border-bottom: 1px solid var(--line);
+}
+a { color: var(--brand); text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
+a:hover { color: var(--brand-dark); }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  text-decoration: none;
+  color: var(--ink);
+}
+.brand::before {
+  content: "";
+  flex: none;
+  width: 30px;
+  height: 30px;
+  background: url("favicon.svg") center / contain no-repeat;
+}
+.brand span { color: var(--brand); }
+nav { display: flex; flex-wrap: wrap; gap: 4px; }
+nav a {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+nav a:hover { color: var(--ink); background: var(--paper-deep); }
+/* The assistant link stands out, as the way to ask instead of searching. */
+nav a[href$="#assistant"] { color: #fff; background: var(--brand); }
+nav a[href$="#assistant"]:hover { color: #fff; background: var(--brand-dark); }
+
+.intro {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: clamp(36px, 8vh, 88px) 0 40px;
+  text-align: center;
+}
+.intro > p:not([class]) { font-size: 1.2rem; color: var(--ink-soft); }
+.eyebrow {
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--brand);
+}
+h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(2.6rem, 7vw, 4.8rem);
+  line-height: 1.02;
+  letter-spacing: -.02em;
+  margin: 14px 0 18px;
+  text-wrap: balance;
+}
+h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1.7rem, 3vw, 2.1rem);
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  margin: 0 0 12px;
+}
+h3 { margin: 0; font-size: 1.1rem; font-weight: 800; }
+p { margin: 12px 0; text-wrap: pretty; }
+.demo-note, small { color: var(--muted); font-size: .9rem; }
+/* The demo note sits under the welcome text as a quiet label. */
+.intro .demo-note {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper-deep);
+}
+
+/* Menu and order */
+.config-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+#catalog { grid-row: span 2; }
+.catalog-items { display: grid; gap: 14px; margin-top: 24px; }
+.catalog-item {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: transform .2s, box-shadow .2s;
+}
+.catalog-item:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.catalog-item p { margin: 4px 0; }
+.item-heading, .item-actions, .quote-line, .total { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.item-heading { align-items: baseline; }
+.item-heading h3, .item-heading strong { font-family: var(--display); font-size: 1.3rem; font-weight: 600; }
+.item-actions { margin-top: 8px; }
+button, input, select, textarea { font: inherit; }
+button {
+  padding: 10px 20px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #fff;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  background: var(--brand);
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+button:hover { background: var(--brand-dark); }
+button:active { transform: translateY(1px); }
+button:disabled {
+  color: var(--muted);
+  border-color: var(--line);
+  background: var(--paper-deep);
+  cursor: default;
+  transform: none;
+}
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.quote, .configure {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.quote-items { list-style: none; margin: 0; padding: 0; }
+.quote-items li { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.quote-line strong { font-weight: 800; }
+.quantity-controls { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+/* Round outline buttons for one more or one fewer. */
+.quantity-controls button {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--surface);
+}
+.quantity-controls button:hover { background: var(--paper-deep); }
+.quantity-controls .remove {
+  width: auto;
+  margin-left: auto;
+  padding: 0 4px;
+  color: var(--brand);
+  border: 0;
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.quantity-controls .remove:hover { color: var(--brand-dark); background: transparent; }
+.total { padding: 14px 0 4px; font-weight: 800; }
+.total strong { font-family: var(--display); font-size: 1.5rem; font-weight: 600; }
+label { display: block; margin: 16px 0 6px; font-weight: 700; }
+input, select, textarea {
+  width: 100%;
+  padding: 11px 14px;
+  color: inherit;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--surface);
+  transition: border-color .15s, box-shadow .15s;
+}
+input:hover, select:hover, textarea:hover { border-color: #c4ae95; }
+input:focus, select:focus, textarea:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 14%, transparent);
+}
+/* A drawn arrow, so every select looks the same in every browser. */
+select {
+  appearance: none;
+  padding-right: 40px;
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%236b5949' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 15px center / 12px 8px;
+}
+textarea { resize: vertical; }
+small { display: block; margin-top: 6px; }
+#issue-quote, #draft-add { width: 100%; margin-top: 24px; padding: 13px 20px; }
+.draft-price { font-weight: 800; }
+.extras-box { display: grid; gap: 8px; margin-top: 8px; }
+.extra-option { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.extra-option input { width: auto; }
+.confirmation {
+  margin-top: 32px;
+  padding: 24px;
+  border: 1px solid var(--ok-line);
+  border-radius: 22px;
+  background: var(--ok-bg);
+  overflow-wrap: anywhere;
+}
+.confirmation h2 { color: var(--ok-ink); }
+footer {
+  margin-top: 56px;
+  color: var(--muted);
+  font-size: .9rem;
+  border-top: 1px solid var(--line);
+}
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+[hidden] { display: none !important; }
+@media (max-width: 720px) {
+  main, footer { padding: 16px; }
+  header { flex-direction: column; align-items: start; gap: 12px; padding: 14px 16px; }
+  nav a { padding: 6px 12px; }
+  .config-layout { grid-template-columns: 1fr; gap: 24px; }
+  #catalog { grid-row: auto; }
+  .intro { padding: 24px 0; }
+  .quote, .configure { padding: 20px; }
+}
+
+/* Assistant layout, from the agentify-website skill, in the site's colors. The chat
+   has no box: it grows with the page, and its message box sticks to the bottom of the
+   screen while the chat is in view. chat-follow.js scrolls to each new message. */
+.assistant { margin-top: 64px; }
+#quote-error { color: var(--error); font-weight: 700; }
+#assistant-status {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+/* The runtime reads these variables for its chat, settings and agent panels.
+   White text sits on --ns-primary (the Send and settings buttons) and on --ns-accent
+   (Send while a turn is steered), so both keep at least 4.5:1 contrast with white.
+   The visitor's messages use the ink. */
+#agent-app {
+  --ns-font: var(--text);
+  --ns-bg: var(--paper);
+  --ns-fg: var(--ink);
+  --ns-primary: var(--brand);
+  --ns-accent: var(--brand-dark);
+  --ns-border: var(--line);
+  --ns-panelbg: var(--surface);
+  --ns-msgbg: var(--surface);
+  --ns-muted: var(--muted);
+  --ns-user-bg: var(--ink);
+  --ns-user-fg: #fff;
+  --ns-radius: 18px;
+  margin-top: 24px;
+}
+
+/* Header: the site's mark, the assistant's name and the model badge, as pills. */
+#agent-app .ns-header { flex-wrap: wrap; gap: 10px; padding: 0 0 14px; border-bottom: 1px solid var(--line); }
+#agent-app .ns-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+#agent-app .ns-title::before {
+  content: "";
+  flex: none;
+  width: 30px;
+  height: 30px;
+  background: url("favicon.svg") center / contain no-repeat;
+}
+#agent-app .ns-llmbadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--ink);
+  background: var(--surface);
+}
+#agent-app .ns-llmbadge::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+#agent-app .ns-llmbadge.real::before { background: var(--ok); }
+#agent-app .ns-llmbadge.pending::before { background: var(--warn-line); }
+#agent-app .ns-llmbadge.error { color: var(--error); border-color: #efc7c1; background: #fdf1ef; }
+#agent-app .ns-llmbadge.error::before { background: var(--error); }
+#agent-app .ns-llmbadge.mock { color: #7a4d06; border-color: var(--warn-line); background: var(--warn-bg); }
+#agent-app .ns-llmbadge.mock::before { background: #d39a2c; }
+#agent-app .ns-devtoggle {
+  padding: 5px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+#agent-app .ns-devtoggle.on { color: #fff; border-color: var(--ink); background: var(--ink); }
+/* A site's button:hover background also reaches the runtime's plain buttons, behind
+   their dark text. Give them a light hover of their own. */
+#agent-app .ns-devtoggle:not(.on):hover { background: var(--paper-deep); }
+#agent-app .ns-modal-close:hover { background: transparent; }
+#agent-app .ns-breadcrumb { font-family: var(--mono); }
+
+.assistant-panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 16px;
+  margin-top: 16px;
+}
+#agent-app .ns-agents {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+#agent-app .ns-agents h3 { font-size: 11px; font-weight: 800; letter-spacing: .12em; color: var(--muted); }
+#agent-app #ns-anodes { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+#agent-app [data-ns-slot="settings"] {
+  margin-top: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+#agent-app .ns-anode { gap: 8px; min-width: 0; padding: 5px 12px 5px 9px; border-color: var(--line); border-radius: 999px; background: var(--surface); }
+#agent-app .ns-anode:hover { border-color: var(--line-strong); box-shadow: var(--shadow); }
+#agent-app .ns-anode.active { border-color: var(--brand); }
+#agent-app .ns-anode .ns-aicon { font-size: 15px; }
+#agent-app .ns-anode .ns-ameta { display: flex; align-items: baseline; gap: 6px; }
+#agent-app .ns-anode .ns-aname { max-width: 240px; font-weight: 800; }
+#agent-app .ns-anode .ns-arole { white-space: nowrap; }
+#agent-app .ns-anode.done .ns-adot { background: var(--ok); }
+
+/* The chat: no box and no fixed height. It grows with its messages. */
+#agent-app.ns-composed-app [data-ns-slot="chat"] { height: auto; }
+#agent-app .ns-chat {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+#agent-app .ns-action-status { border-bottom: 0; color: var(--muted); }
+#agent-app .ns-action-status summary { font-weight: 700; cursor: pointer; }
+/* The left padding makes room for the assistant's mark beside its replies. */
+#agent-app .ns-msgs { flex: none; gap: 18px; padding: 16px 0 8px 44px; overflow: visible; }
+/* Long links in a reply would run out of the bubble on a phone. "anywhere" would also
+   let the consent card's buttons shrink and split their labels. */
+#agent-app .ns-msg { overflow-wrap: break-word; font-size: 16px; line-height: 1.6; }
+/* The assistant's replies sit on the page, beside its mark, without a bubble. */
+#agent-app .ns-msg.bot {
+  position: relative;
+  padding: 3px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+#agent-app .ns-msg.user { padding: 11px 16px; border-radius: 18px 18px 6px 18px; }
+#agent-app .ns-msg.bot:not(.ns-turn-status, .ns-consent, .ns-linker)::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: -44px;
+  width: 30px;
+  height: 30px;
+  background: url("favicon.svg") center / contain no-repeat;
+}
+#agent-app .ns-msg.ns-turn-status { padding: 2px 0; font-weight: 700; }
+/* While a consent card waits, the status line above it already says "Contacting", though
+   nothing has been sent. Hide it until the visitor answers. */
+#agent-app .ns-msgs:has(.ns-consent-actions) > .ns-turn-status { display: none; }
+
+/* The message box is a pill with its buttons inside, and it sticks to the bottom of
+   the screen. The fade above it lets messages pass softly behind it. */
+#agent-app .ns-inputbar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  isolation: isolate;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 6px 20px 22px;
+  border: 0;
+  background: linear-gradient(to top, var(--paper) 72%, transparent);
+}
+/* The pill is drawn behind the input and buttons, inside the fade. */
+#agent-app .ns-inputbar::before {
+  content: "";
+  position: absolute;
+  inset: 18px 0 14px;
+  z-index: -1;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: border-color .15s, box-shadow .15s;
+}
+#agent-app .ns-inputbar:focus-within::before { border-color: var(--brand); }
+/* The pill shows the keyboard focus, as the input itself has no border. */
+#agent-app .ns-inputbar:has(.ns-input:focus-visible)::before { outline: 3px solid var(--focus); outline-offset: 2px; }
+#agent-app .ns-inputbar[data-turn-active="true"]::before {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 18%, transparent), var(--shadow);
+}
+#agent-app .ns-inputbar .ns-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 10px 0;
+  border: 0;
+  border-radius: 0;
+  font-size: 16px;
+  background: transparent;
+  box-shadow: none;
+}
+#agent-app .ns-inputbar .ns-input:focus-visible { outline: none; }
+#agent-app .ns-inputbar button { flex: none; padding: 11px 20px; border-radius: 999px; font-weight: 800; }
+#agent-app .ns-send:hover:not(:disabled) { background: var(--brand-dark); }
+/* The runtime styles New chat inline, so only !important can restyle it. */
+#agent-app #ns-newchat {
+  color: var(--ink-soft) !important;
+  border: 1.5px solid var(--line) !important;
+  background: var(--surface) !important;
+}
+#agent-app #ns-newchat:hover { background: var(--paper-deep) !important; }
+
+/* Chat forms and choices */
+#agent-app .ns-widget { padding: 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+/* A widget with its own color keeps a bar of that color along its top. */
+#agent-app .ns-widget[style*="--w"] { border-top: 3px solid var(--w); }
+#agent-app .ns-w-head { font-family: var(--display); font-size: 1.1rem; font-weight: 600; }
+/* Chat forms label radio groups with a legend, so site legend fonts would reach them. */
+#agent-app .ns-w-label { font-family: inherit; font-weight: 700; }
+/* Site label rules add margins to chat form fields and make their options bold. */
+#agent-app .ns-widget label { margin: 0; }
+#agent-app .ns-w-radio label,
+#agent-app .ns-w-multi label,
+#agent-app .ns-w-toggle { font-weight: 500; }
+/* The runtime sizes radio and multi-choice options but not the checkbox label. */
+#agent-app .ns-w-toggle { font-size: 13px; }
+#agent-app .ns-w-row :is(input[type="text"], input[type="number"], input[type="date"], input[type="time"], select, textarea) {
+  padding: 10px 12px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 12px;
+  font-size: 15px;
+}
+#agent-app .ns-w-row select { padding-right: 38px; }
+#agent-app .ns-w-btn { padding: 10px 18px; border-radius: 999px; font-weight: 800; }
+#agent-app .ns-w-btn.ghost { color: var(--ink); border: 1.5px solid var(--line-strong); background: var(--surface); }
+/* Chat choices are buttons with a light background. A site's button color can hide their
+   titles. */
+#agent-app .ns-w-choice {
+  padding: 12px 14px;
+  color: var(--ns-fg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+#agent-app .ns-w-choice:hover:not(:disabled) { background: var(--surface); box-shadow: var(--shadow); }
+#agent-app .ns-w-choice:disabled:hover { background: var(--surface); }
+#agent-app .ns-w-field { border-bottom: 1px solid var(--line); }
+/* The welcome order form: larger fields, and choice cards that are easy to tap. */
+#agent-app .ns-widget { gap: 12px; padding: 20px; }
+#agent-app .ns-w-form { gap: 18px; }
+#agent-app .ns-w-row { gap: 6px; }
+#agent-app .ns-w-label { margin: 0; padding: 0; font-size: .875rem; }
+#agent-app .ns-w-fdesc { font-size: .8rem; color: var(--muted); }
+#agent-app .ns-w-row :is(input[type="text"], input[type="time"], select, textarea) {
+  min-height: 44px;
+  font-size: 1rem;
+  color: var(--ink);
+  background-color: var(--surface);
+}
+#agent-app .ns-w-row input[type="time"] { display: block; min-width: 0; }
+#agent-app .ns-w-radio { display: flex; gap: 10px; margin-top: 6px; }
+#agent-app .ns-w-radio label {
+  flex: 1 1 120px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 14px;
+  background: var(--surface);
+  cursor: pointer;
+  font-size: .95rem;
+}
+#agent-app .ns-w-radio input[type="radio"] {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--brand);
+}
+#agent-app .ns-w-radio label:hover { border-color: var(--brand); }
+#agent-app .ns-w-radio label:has(input:checked) {
+  color: var(--brand-dark);
+  border-color: var(--brand);
+  background: var(--brand-soft);
+  box-shadow: inset 0 0 0 1px var(--brand);
+}
+#agent-app .ns-w-radio label:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 3px; }
+#agent-app .ns-w-actions { margin-top: 2px; }
+#agent-app .ns-w-form .ns-w-btn { min-height: 44px; padding: 10px 20px; }
+
+/* The partner consent card, in amber, with the safest choice as a plain outline. The
+   partner window prompt uses the same card, with Open as its main button. */
+#agent-app .ns-msg.ns-consent {
+  padding: 16px 18px;
+  border: 1.5px solid var(--warn-line);
+  border-radius: 18px;
+  background: var(--warn-bg);
+}
+#agent-app .ns-consent-title { margin-bottom: 4px; font-family: var(--display); font-size: 1.1rem; font-weight: 600; }
+#agent-app .ns-consent-sub { font-family: var(--mono); color: var(--muted); }
+#agent-app .ns-consent-req { color: var(--ink-soft); }
+/* On a phone the consent card is too narrow for its three buttons in one row, and
+   "Always allow" breaks onto two lines. Keep each label whole and wrap the row. */
+#agent-app .ns-consent-actions { flex-wrap: wrap; margin-top: 6px; }
+#agent-app .ns-consent-actions button {
+  padding: 9px 16px;
+  white-space: nowrap;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 800;
+  background: var(--ink);
+}
+#agent-app .ns-consent-actions button:not([data-d="allow"], [data-d="open"]) {
+  color: var(--ink);
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
+}
+#agent-app .ns-consent-actions button:not([data-d="allow"], [data-d="open"]):hover { background: var(--paper-deep); }
+#agent-app .ns-consent-done { font-weight: 800; color: var(--ok-ink); }
+#agent-app .ns-msg.ns-linker { padding: 16px 18px; border: 1.5px solid var(--line-strong); border-radius: 18px; background: var(--brand-soft); }
+#agent-app .ns-linker-form :is(input, button) { border-radius: 999px; }
+
+/* AI model settings, inside the drawer above */
+#agent-app .ns-settings { border-top: 0; font-size: 13.5px; }
+#agent-app .ns-settings-body { gap: 10px; padding: 0; }
+/* Site label rules add margins and bold text, and the inputs inside the labels inherit
+   the weight. */
+#agent-app .ns-settings-body label { margin: 4px 0; font-weight: 700; }
+#agent-app .ns-settings-body :is(input[type="text"], input[type="password"], input:not([type]), select) {
+  padding: 9px 12px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+#agent-app .ns-settings-body select { padding-right: 36px; }
+#agent-app .ns-settings-body button { padding: 9px 18px; border-radius: 999px; font-weight: 800; }
+#agent-app .ns-settings-body button.ghost { color: var(--ink); border: 1.5px solid var(--line-strong); background: var(--surface); }
+#agent-app .ns-key-help { padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+#agent-app .ns-key-providers a { padding: 8px 12px; border-color: var(--line-strong); border-radius: 12px; }
+#agent-app .ns-key-providers a:hover { border-color: var(--brand); }
+#agent-app .ns-hint.warn { color: #8a4b08; }
+#agent-app .ns-settings-advanced { border-color: var(--line); }
+
+/* Developer view: the agent graph beside the run log, in dark ink like a terminal. */
+#agent-app[data-dev="true"] .ns-dev {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: start;
+  gap: 12px;
+}
+#agent-app .ns-graph { border-color: var(--line); border-radius: 18px; background: var(--surface); }
+#agent-app .ns-log { max-height: 420px; padding: 14px; border: 0; border-radius: 18px; color: #e9ddcd; background: var(--ink); }
+#agent-app .ns-log h3 { color: #b8a48c; }
+#agent-app .ns-toolbar { flex-wrap: wrap; row-gap: 6px; }
+#agent-app .ns-pill { color: #e9ddcd; background: var(--ink-soft); white-space: nowrap; }
+#agent-app #ns-export {
+  padding: 5px 12px;
+  white-space: nowrap;
+  color: #e9ddcd;
+  border: 1px solid var(--muted);
+  border-radius: 999px;
+  background: transparent;
+}
+#agent-app #ns-export:hover { background: var(--ink-soft); }
+#agent-app .ns-row { color: #fbf6ef; border-radius: 8px; background: rgba(255, 255, 255, .05); }
+#agent-app .ns-row .ns-tag { color: #ef8c68; }
+#agent-app .ns-row .ns-meta { color: #b8a48c; }
+#agent-app .ns-row pre { color: #e9ddcd; border-color: var(--ink-soft); background: #1d1713; }
+#agent-app .ns-row:is(.k-error, .status-error) { background: rgba(239, 68, 68, .18); }
+#agent-app .ns-modal { background: rgba(42, 33, 28, .55); }
+#agent-app .ns-modal-card { padding: 24px; border-radius: 22px; box-shadow: var(--shadow-lift); }
+#agent-app .ns-modal-card h4 { font-family: var(--display); font-size: 1.25rem; font-weight: 600; }
+
+/* Site-wide form rules often stretch the runtime's own controls. Undo them here. */
+#agent-app input[type="checkbox"],
+#agent-app input[type="radio"] { width: auto; }
+/* The runtime spaces its buttons with gap. A site's button margin pushes Send below the input. */
+#agent-app button { margin: 0; }
+
+/* site.js and the runtime add their confirmation dialogs to <body>, outside #agent-app. */
+body > dialog {
+  width: calc(100% - 32px);
+  max-width: 540px;
+  max-height: 85vh;
+  overflow: auto;
+  padding: 26px;
+  color: var(--ink);
+  border: 0;
+  border-radius: 24px;
+  background: var(--surface);
+  font: 500 16px / 1.55 var(--text);
+  box-shadow: var(--shadow-lift);
+}
+body > dialog::backdrop { background: rgba(42, 33, 28, .55); }
+body > dialog h2 { margin: 0 0 8px; font: 600 1.5rem / 1.2 var(--display); }
+/* A right margin keeps wrapped buttons lined up on the left. */
+body > dialog button { margin: 18px 8px 0 0; }
+/* The confirming button is dark ink and the other is a plain outline, so the two
+   choices do not look the same. */
+body > dialog > button:first-of-type { background: var(--ink); }
+body > dialog > button:first-of-type:hover { background: #000; }
+body > dialog > button:last-of-type:not(:first-of-type) {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--surface);
+}
+body > dialog > button:last-of-type:not(:first-of-type):hover { background: var(--paper-deep); }
+body > dialog pre {
+  padding: 12px 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: 12.5px / 1.5 var(--mono);
+  color: var(--ink-soft);
+  border-radius: 14px;
+  background: var(--paper);
+}
+/* The runtime's own dialog sets its border, corners and font inline. */
+body > dialog:not(.assistant-review) {
+  border: 0 !important;
+  border-radius: 24px !important;
+  font: 500 16px / 1.55 var(--text) !important;
+}
+/* site.js's dialog: the details in two columns on a soft panel. */
+.assistant-review dl {
+  display: grid;
+  grid-template-columns: fit-content(40%) 1fr;
+  gap: 8px 16px;
+  margin: 16px 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--paper);
+}
+.assistant-review dt { font-weight: 700; color: var(--muted); }
+.assistant-review dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+.assistant-review details { margin: 12px 0; font-size: .9rem; color: var(--muted); }
+.assistant-review summary { font-weight: 700; cursor: pointer; }
+
+@media (max-width: 760px) {
+  #agent-app .ns-msgs { padding-left: 40px; }
+  #agent-app .ns-msg.bot:not(.ns-turn-status, .ns-consent, .ns-linker)::before { left: -40px; width: 28px; height: 28px; }
+  #agent-app .ns-inputbar { gap: 6px; padding-left: 18px; }
+  #agent-app .ns-inputbar button { padding: 10px 14px; }
+  #agent-app[data-dev="true"] .ns-dev { grid-template-columns: 1fr; }
+  .assistant-panels { grid-template-columns: 1fr; }
+  /* On a phone, each detail goes under its label, so an email is not split. */
+  .assistant-review dl { grid-template-columns: 1fr; gap: 0; }
+  .assistant-review dd { margin-bottom: 8px; }
+}

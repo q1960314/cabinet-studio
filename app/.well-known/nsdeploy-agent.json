@@ -1,0 +1,7 @@
+{
+  "available": false,
+  "front_man": "cabinet_coordinator",
+  "network": "cabinet_studio_assistant",
+  "protocol": "nsdeploy-agent-mcp/v1",
+  "reason": "This is a static bundle; a public MCP facade requires an application host."
+}

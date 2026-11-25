@@ -1,0 +1,18 @@
+{
+  "exports": [
+    {
+      "aliases": [
+        "cabinet_studio_assistant",
+        "cabinet_coordinator"
+      ],
+      "front_man": "cabinet_coordinator",
+      "network": "cabinet_studio_assistant",
+      "url": "cabinet_studio_assistant"
+    }
+  ],
+  "imports": [],
+  "link_updates": {
+    "mode": "browser-local"
+  },
+  "protocol": "nsdeploy-link/v1"
+}
