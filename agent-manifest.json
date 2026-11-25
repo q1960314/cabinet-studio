@@ -1,0 +1,78 @@
+{
+  "actions": {
+    "agentTools": [
+      "query_catalog",
+      "configure_cabinet",
+      "add_to_quote",
+      "issue_quote"
+    ],
+    "bridge": "./bridge/action-bridge.html",
+    "module": "./cabinet-actions.js",
+    "version": 1
+  },
+  "agent_mcp": {
+    "available": false,
+    "front_man": "cabinet_coordinator",
+    "network": "cabinet_studio_assistant",
+    "protocol": "nsdeploy-agent-mcp/v1",
+    "reason": "This is a static bundle; a public MCP facade requires an application host."
+  },
+  "allowed_peers": [],
+  "brand": "Cabinet Studio Assistant",
+  "deployment": {
+    "browser_mock": false,
+    "direct_byok": true,
+    "direct_mcp_requires_cors": true,
+    "mode": "static",
+    "public_mcp_facade": false,
+    "self_contained_runtime": true
+  },
+  "linking": {
+    "exports": [
+      {
+        "aliases": [
+          "cabinet_studio_assistant",
+          "cabinet_coordinator"
+        ],
+        "front_man": "cabinet_coordinator",
+        "network": "cabinet_studio_assistant",
+        "url": "cabinet_studio_assistant"
+      }
+    ],
+    "imports": [],
+    "link_updates": {
+      "mode": "browser-local"
+    },
+    "protocol": "nsdeploy-link/v1"
+  },
+  "llm_router": {
+    "base_url": "https://api.otari.ai/api/v1",
+    "byok_router": "https://api.otari.ai/api/v1",
+    "mock": false
+  },
+  "networks": [
+    {
+      "description": "Ask about cabinets, configure one with a finish and extras, add it to your quote, and issue the quote when you confirm.",
+      "front_man": "cabinet_coordinator",
+      "hocon": "./cabinet_studio_assistant.network.json",
+      "name": "cabinet_studio_assistant",
+      "sample_queries": [
+        "Which wardrobes are 120 cm wide, and what do they cost?",
+        "Configure the 140 cm sideboard with a dark walnut finish and an LED light strip. What is the unit price?",
+        "Add one tea cabinet 500 to my quote, then issue the quote for me.",
+        "Can you arrange delivery and installation at my home?"
+      ],
+      "tags": [
+        "agentified-website"
+      ]
+    }
+  ],
+  "peer_policy": {
+    "deny_origins": [],
+    "mode": "closed",
+    "note": "Local agents and page-local actions only."
+  },
+  "theme": {
+    "primary": "#7c4a21"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "networks": [
+    {
+      "name": "cabinet_studio_assistant"
+    }
+  ],
+  "actions": {
+    "version": 1,
+    "module": "./bridge-actions.js"
+  }
+}
