@@ -1,7 +1,14 @@
 {
   "currency": "CNY",
   "demo": true,
-  "demo_note": "Demo data — not a real price list. Prices, dimensions and materials are sample values for this agentic-website demo, not a real quote.",
+  "demo_note": "Demo data — prices are computed from projected area (width × height, depth not counted) at the E0 demo rate in the pricing block; not a real quote.",
+  "pricing": {
+    "method": "projected-area",
+    "ratePerSqmCents": 49800,
+    "board": "E0 多层实木",
+    "tvRatePerMeterCents": 46800,
+    "note": "演示口径：2026 年区域公示价为例，非全国统一价；饰面颜色不加价；五金灯带另计"
+  },
   "extras": [
     {
       "delta": 18000,
@@ -50,7 +57,7 @@
       "id": "wardrobe-120",
       "material": "胡桃木贴面",
       "name": "分段式衣柜 120",
-      "price": 328000,
+      "price": 119520,
       "widthCm": 120
     },
     {
@@ -61,7 +68,7 @@
       "id": "wardrobe-160",
       "material": "胡桃木贴面",
       "name": "分段式衣柜 160",
-      "price": 428000,
+      "price": 159360,
       "widthCm": 160
     },
     {
@@ -72,7 +79,7 @@
       "id": "sideboard-140",
       "material": "胡桃木贴面",
       "name": "餐边柜 140",
-      "price": 218000,
+      "price": 59262,
       "widthCm": 140
     },
     {
@@ -83,7 +90,7 @@
       "id": "sideboard-180",
       "material": "胡桃木贴面",
       "name": "餐边柜 180",
-      "price": 298000,
+      "price": 76194,
       "widthCm": 180
     },
     {
@@ -94,7 +101,7 @@
       "id": "entry-100",
       "material": "胡桃木贴面",
       "name": "玄关柜 100",
-      "price": 168000,
+      "price": 99600,
       "widthCm": 100
     },
     {
@@ -105,7 +112,7 @@
       "id": "tv-200",
       "material": "胡桃木贴面",
       "name": "电视柜 200",
-      "price": 188000,
+      "price": 93600,
       "widthCm": 200
     },
     {
@@ -116,7 +123,7 @@
       "id": "bookcase-120",
       "material": "胡桃木贴面",
       "name": "书柜 120",
-      "price": 198000,
+      "price": 119520,
       "widthCm": 120
     },
     {
@@ -127,7 +134,7 @@
       "id": "tea-500",
       "material": "胡桃木贴面",
       "name": "茶柜 500",
-      "price": 128000,
+      "price": 29880,
       "widthCm": 50
     }
   ]

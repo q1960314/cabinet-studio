@@ -40,7 +40,7 @@ globalThis.Option = StubOption;
 const { registerActions } = await import("../cabinet-actions.js");
 // site.js boots the runtime only in a browser. Here it gives the dialog's words.
 const { AssistantMount } = await import("../site.js");
-const { App } = await import("../script.js");
+const { App, computedBasePrice, pricing } = await import("../script.js");
 // All tests in this file share this one page and run in order, as in one browser tab.
 // Give each test its own data, and compare with the state it read at the start.
 
@@ -550,7 +550,8 @@ class AgentifiedSiteTest {
     assert.deepEqual(AgentifiedSiteTest.focusedIds(), [], `website_${WRITE_ACTION} moved focus.`);
     const after = await AgentifiedSiteTest.readState(registry);
     assert.notDeepEqual(after, before);
-    assert.equal(after.quoteTotal, before.quoteTotal + 656000);
+    // wardrobe-120 base is 2.40 sqm x 49800 = 119520; two of them = 239040.
+    assert.equal(after.quoteTotal, before.quoteTotal + 239040);
     assert.equal(after.quote.length, before.quote.length + 1);
     assert.equal(document.getElementById("quote-total").textContent,
       new Intl.NumberFormat("zh-CN", { style: "currency", currency: "CNY" }).format(after.quoteTotal / 100));
@@ -567,12 +568,32 @@ class AgentifiedSiteTest {
     const merged = await AgentifiedSiteTest.readState(registry);
     assert.equal(merged.quote.length, after.quote.length);
     assert.equal(merged.quote.at(-1).quantity, 3);
-    assert.equal(merged.quoteTotal, after.quoteTotal + 328000);
+    assert.equal(merged.quoteTotal, after.quoteTotal + 119520);
   }
 
   /**
-   * Configuring a cabinet computes the unit price from the base price plus the finish
-   * and extras deltas, and refuses unknown ids without changing anything.
+   * The stored base price of every catalog item equals the price the pricing
+   * rule computes from its dimensions — data and formula cannot drift apart.
+   */
+  static async testStoredPricesMatchComputedPricing() {
+    assert.equal(pricing.method, "projected-area");
+    assert.equal(pricing.ratePerSqmCents, 49800);
+    assert.equal(pricing.tvRatePerMeterCents, 46800);
+    const state = App.page.getState();
+    assert.equal(state.catalog.length, 8);
+    for (const item of state.catalog) {
+      assert.equal(item.price, computedBasePrice(item),
+        `${item.id}: stored ${item.price} != computed ${computedBasePrice(item)}`);
+    }
+    // The pricing rule itself is in the state the agent reads, so it can
+    // explain how a price is derived instead of quoting a bare number.
+    assert.deepEqual(state.pricing, pricing);
+  }
+
+  /**
+   * Configuring a cabinet computes the unit price from the projected-area base
+   * price plus the finish and extras deltas, and refuses unknown ids without
+   * changing anything.
    */
   static async testConfigureComputesPrice() {
     const loaded = await AgentifiedSiteTest.load();
@@ -587,10 +608,10 @@ class AgentifiedSiteTest {
     }, null, []);
     assert.equal(receipt.status, "succeeded");
     assert.notEqual(receipt.result.ok, false, receipt.result.reason);
-    // 328000 base + 0 dark walnut (finish is a colour choice, no upcharge)
-    // + 18000 LED strip = 346000.
-    assert.equal(receipt.result.draftConfig.unitPrice, 346000);
-    assert.equal(document.getElementById("draft-price").textContent, "单价 ¥3,460.00");
+    // 119520 base (2.40 sqm x 49800) + 0 dark walnut (finish is a colour
+    // choice, no upcharge) + 18000 LED strip = 137520.
+    assert.equal(receipt.result.draftConfig.unitPrice, 137520);
+    assert.equal(document.getElementById("draft-price").textContent, "单价 ¥1,375.20");
     assert.equal(receipt.result.draftConfig.finish, "dark-walnut");
     assert.deepEqual(receipt.result.draftConfig.extras, ["led"]);
     // The quote is untouched by configuring.
@@ -1116,7 +1137,7 @@ class AgentifiedSiteTest {
           const toolMsg = messages.find(message => message.name === "website_add_to_quote");
           const receipt = JSON.parse(toolMsg.content);
           assert.equal(receipt.status, "succeeded");
-          assert.equal(receipt.result.quoteTotal, 128000);
+          assert.equal(receipt.result.quoteTotal, 29880);
           return { content: "", toolCalls: [{
           id: "render-intake", type: "function", function: {
             name: "render_cruse", arguments: JSON.stringify({ presentation }),
@@ -1125,16 +1146,16 @@ class AgentifiedSiteTest {
         }
         const renderMsg = messages.find(message => message.name === "render_cruse");
         assert.equal(JSON.parse(renderMsg.content).status, "accepted");
-        return { content: "Added 1× 茶柜 500. Quote total: ¥1,280.00. Continue with the form below.", toolCalls: [] };
+        return { content: "Added 1× 茶柜 500. Quote total: ¥298.80. Continue with the form below.", toolCalls: [] };
       } },
     };
     let result;
     for await (const event of engine.streamTurn("Add a tea cabinet to my quote")) {
       if (event.type === "turn.completed") result = event.result;
     }
-    assert.equal(result.text, "Added 1× 茶柜 500. Quote total: ¥1,280.00. Continue with the form below.");
+    assert.equal(result.text, "Added 1× 茶柜 500. Quote total: ¥298.80. Continue with the form below.");
     assert.deepEqual(result.presentation, presentation);
-    assert.equal(document.getElementById("quote-total").textContent, "¥1,280.00");
+    assert.equal(document.getElementById("quote-total").textContent, "¥298.80");
     assert.equal(calls, 3);
   }
 
@@ -1197,6 +1218,7 @@ test("front agent reads page state through a website tool", AgentifiedSiteTest.t
 test("the read tool leaves the page unchanged", AgentifiedSiteTest.testReadActionChangesNothing);
 test("the write tool changes the state and refuses an unknown ID", AgentifiedSiteTest.testWriteActionChangesState);
 test("configuring a cabinet computes the unit price and refuses unknown ids", AgentifiedSiteTest.testConfigureComputesPrice);
+test("every stored base price equals the price the pricing rule computes", AgentifiedSiteTest.testStoredPricesMatchComputedPricing);
 test("irreversible action needs confirmation and a decline changes nothing", AgentifiedSiteTest.testIrreversibleActionNeedsConfirmation);
 test("each irreversible action has its own dialog words", AgentifiedSiteTest.testDialogWordsAreFilledIn);
 test("the page has no template text left", AgentifiedSiteTest.testAssistantSectionIsFilledIn);

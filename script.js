@@ -1,11 +1,24 @@
 // Cabinet Studio page state. Prices are integer cents (CNY).
 // The catalog is demo data (catalog.json); the quote lives only in page memory.
+// Base prices are COMPUTED from projected area (width x height, depth not
+// counted) at the E0 demo rate in the pricing block — never a flat invented
+// price. Low long pieces (TV cabinet) are priced per linear meter instead.
 import catalogData from "./catalog.json" with { type: "json" };
 
 export const catalog = catalogData.items;
 export const finishes = catalogData.finishes;
 export const extras = catalogData.extras;
+export const pricing = catalogData.pricing;
 export const CURRENCY = catalogData.currency;
+
+// Base price (cents) from the pricing rule: projected area x rate per sqm,
+// or width in metres x rate per metre for the TV cabinet.
+export function computedBasePrice(item) {
+  if (item.category === "电视柜") {
+    return Math.round((item.widthCm / 100) * pricing.tvRatePerMeterCents);
+  }
+  return Math.round((item.widthCm / 100) * (item.heightCm / 100) * pricing.ratePerSqmCents);
+}
 
 // In-memory state intentionally keeps this demo independent of a backend.
 let draftConfig = null;
@@ -25,7 +38,7 @@ const itemById = (id) => catalog.find(item => item.id === id);
 function unitPrice(item, finishId, extraIds) {
   const finish = finishById(finishId);
   const extraTotal = extraIds.reduce((sum, id) => sum + extraById(id).delta, 0);
-  return item.price + finish.delta + extraTotal;
+  return computedBasePrice(item) + finish.delta + extraTotal;
 }
 
 function configKey(itemId, finishId, extraIds) {
@@ -186,6 +199,7 @@ export class CabinetPage {
       catalog: catalog.map(item => ({ ...item })),
       finishes: finishes.map(finish => ({ ...finish })),
       extras: extras.map(extra => ({ ...extra })),
+      pricing: { ...pricing },
       currency: CURRENCY,
       demo: true,
       draftConfig: draftConfig ? { ...draftConfig, extras: [...draftConfig.extras] } : null,
