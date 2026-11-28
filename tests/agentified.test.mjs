@@ -587,9 +587,10 @@ class AgentifiedSiteTest {
     }, null, []);
     assert.equal(receipt.status, "succeeded");
     assert.notEqual(receipt.result.ok, false, receipt.result.reason);
-    // 328000 base + 12000 dark walnut + 18000 LED strip = 358000.
-    assert.equal(receipt.result.draftConfig.unitPrice, 358000);
-    assert.equal(document.getElementById("draft-price").textContent, "单价 ¥3,580.00");
+    // 328000 base + 0 dark walnut (finish is a colour choice, no upcharge)
+    // + 18000 LED strip = 346000.
+    assert.equal(receipt.result.draftConfig.unitPrice, 346000);
+    assert.equal(document.getElementById("draft-price").textContent, "单价 ¥3,460.00");
     assert.equal(receipt.result.draftConfig.finish, "dark-walnut");
     assert.deepEqual(receipt.result.draftConfig.extras, ["led"]);
     // The quote is untouched by configuring.
