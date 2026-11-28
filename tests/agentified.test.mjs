@@ -612,6 +612,9 @@ class AgentifiedSiteTest {
     // choice, no upcharge) + 18000 LED strip = 137520.
     assert.equal(receipt.result.draftConfig.unitPrice, 137520);
     assert.equal(document.getElementById("draft-price").textContent, "单价 ¥1,375.20");
+    // The repeat-click confirmation line is set on every configure, so a
+    // click on the already-shown item leaves persistent, visible proof.
+    assert.match(document.getElementById("draft-confirm").textContent, /^已确认配置 /);
     assert.equal(receipt.result.draftConfig.finish, "dark-walnut");
     assert.deepEqual(receipt.result.draftConfig.extras, ["led"]);
     // The quote is untouched by configuring.

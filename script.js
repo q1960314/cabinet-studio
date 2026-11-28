@@ -238,6 +238,15 @@ export class CabinetPage {
         section.classList.add("config-flash");
       }
     }
+    // A 0.9s ring alone is not verifiable feedback: it ends before any
+    // screenshot can catch it, and it is too weak for the complaint it
+    // answers. Leave a persistent confirmation line whose timestamp changes
+    // on every click, so the click is provably registered both to the eye
+    // and to a screenshot.
+    const confirm = document.querySelector("#draft-confirm");
+    if (confirm) {
+      confirm.textContent = `已确认配置 ${new Date().toLocaleTimeString("zh-CN", { hour12: false })}`;
+    }
     return this.getState();
   }
 

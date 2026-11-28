@@ -201,6 +201,7 @@ button:disabled {
   from { box-shadow: 0 0 0 3px var(--brand); }
   to { box-shadow: 0 0 0 0 transparent; }
 }
+.draft-confirm { margin: 8px 0 0; color: var(--brand); font-weight: 600; }
 .quote-items { list-style: none; margin: 0; padding: 0; }
 .quote-items li { padding: 14px 0; border-bottom: 1px solid var(--line); }
 .quote-line strong { font-weight: 800; }
