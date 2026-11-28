@@ -210,6 +210,20 @@ export class CabinetPage {
       unitPrice: unitPrice(check.item, check.finishId, check.extrasList),
     };
     renderDraft();
+    // Clicking 配置 must always give visible feedback. Re-rendering the panel
+    // for the item already shown produces identical output, so without this
+    // the click reads as a dead button (reported 2026-11-28).
+    const section = document.querySelector("#configure");
+    if (section) {
+      if (typeof section.scrollIntoView === "function") {
+        section.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+      if (section.classList) {
+        section.classList.remove("config-flash");
+        void section.offsetWidth;
+        section.classList.add("config-flash");
+      }
+    }
     return this.getState();
   }
 
